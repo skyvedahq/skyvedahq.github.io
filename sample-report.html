@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Skyveda Health Report</title>
+<style>
+:root{--bg:#f4f6f8;--plate:#fff;--ink:#15202b;--muted:#5a6876;--rule:#d9e0e7;--accent:#1f5f8b;
+  --crit:#b3261e;--crit-soft:#fbe7e5;--high:#b4532a;--high-soft:#f8e9e1;--med:#9a6b00;--med-soft:#fbf0dc;
+  --low:#55607a;--low-soft:#e9ecf2;--ok:#1d7a4c;--ok-soft:#e1f3ea;
+  --body:"Segoe UI",system-ui,-apple-system,sans-serif;--mono:Consolas,ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#0f151b;--plate:#16202a;--ink:#e3e9ef;--muted:#9aa8b6;--rule:#2a3744;
+  --accent:#7fb6e0;--crit:#f2978f;--crit-soft:#3d1a17;--high:#ec9a72;--high-soft:#3a2419;--med:#f0b45a;
+  --med-soft:#3a2a10;--low:#a3abc2;--low-soft:#23283a;--ok:#6fd3a0;--ok-soft:#123326}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);padding:0 16px 48px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-size:28px;margin:28px 0 4px}h2{font-size:20px;margin:36px 0 12px}h3{font-size:16px;margin:0}
+p{margin:0 0 8px;max-width:75ch}.muted{color:var(--muted)}
+code,pre{font-family:var(--mono);font-size:13px}
+pre{background:var(--bg);border:1px solid var(--rule);border-radius:6px;padding:10px 12px;overflow-x:auto;white-space:pre-wrap}
+.meta{color:var(--muted);font-size:13px}
+.label-line{display:inline-block;font-weight:600;color:var(--accent);border:1px solid var(--rule);border-radius:6px;padding:4px 10px;margin:4px 0 10px;background:var(--plate)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.card{background:var(--plate);border:1px solid var(--rule);border-radius:10px;padding:16px;min-width:0}
+.big{font-size:40px;font-weight:700;line-height:1}
+.label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.bar{height:8px;border-radius:4px;background:var(--rule);margin-top:8px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent)}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.04em}
+.critical{color:var(--crit);background:var(--crit-soft)}.high{color:var(--high);background:var(--high-soft)}
+.medium{color:var(--med);background:var(--med-soft)}.low{color:var(--low);background:var(--low-soft)}
+.pass{color:var(--ok);background:var(--ok-soft)}
+.finding{background:var(--plate);border:1px solid var(--rule);border-left:5px solid var(--rule);border-radius:10px;padding:16px;margin-bottom:12px}
+.finding.sev-critical{border-left-color:var(--crit)}.finding.sev-high{border-left-color:var(--high)}
+.finding.sev-medium{border-left-color:var(--med)}.finding.sev-low{border-left-color:var(--low)}
+.fhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:8px}
+.waste{font-weight:700;color:var(--high)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--rule);vertical-align:top;overflow-wrap:anywhere}
+th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.tw{overflow-x:auto}
+details{margin-top:8px}summary{cursor:pointer;color:var(--accent);font-weight:600}
+ol{margin:6px 0;padding-left:20px}
+.nw{white-space:nowrap}
+footer{margin-top:40px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Skyveda Health Report</h1>
+<p class="label-line">Sample report · fictional online retailer · not a real customer</p><p class="meta">
+  AZURE · 3 scope(s) ·
+  scanned 10 Nov 2026, 11:02 UTC · Skyveda 0.5.0
+· <strong>offline data</strong></p>
+<p class="meta">Read-only scan: nothing in the environment was created, changed or deleted.</p>
+
+<h2>Summary</h2>
+<div class="grid">
+  <div class="card"><div class="label">Overall score</div>
+    <div class="big">35<span class="muted" style="font-size:18px">/100</span></div></div>
+  <div class="card"><div class="label">Findings</div><div class="big">42</div>
+    <div class="meta"><span class="pill critical">2 critical</span> <span class="pill high">14 high</span> <span class="pill medium">20 medium</span> <span class="pill low">6 low</span> </div></div>
+  <div class="card"><div class="label">Waste</div><div class="big">₹55,282</div>
+    <div class="meta">a month · ₹53,426 billed, ₹1,856 list-price estimate</div></div>
+  <div class="card"><div class="label">Checks</div><div class="big">60</div>
+    <div class="meta">18 passed · 42 failed · 0 not scored</div></div>
+</div>
+
+<h2>Scores by area</h2>
+<div class="grid">
+  <div class="card"><div class="label">Kubernetes (AKS)</div>
+    <div class="big" style="font-size:28px">68</div>
+    <div class="bar"><i style="width:68%"></i></div>
+    <div class="meta">3 passed · 2 failed</div></div>
+  <div class="card"><div class="label">Network</div>
+    <div class="big" style="font-size:28px">12</div>
+    <div class="bar"><i style="width:12%"></i></div>
+    <div class="meta">2 passed · 11 failed</div></div>
+  <div class="card"><div class="label">Identity</div>
+    <div class="big" style="font-size:28px">35</div>
+    <div class="bar"><i style="width:35%"></i></div>
+    <div class="meta">2 passed · 5 failed</div></div>
+  <div class="card"><div class="label">Security</div>
+    <div class="big" style="font-size:28px">42</div>
+    <div class="bar"><i style="width:42%"></i></div>
+    <div class="meta">8 passed · 11 failed</div></div>
+  <div class="card"><div class="label">Reliability</div>
+    <div class="big" style="font-size:28px">33</div>
+    <div class="bar"><i style="width:33%"></i></div>
+    <div class="meta">2 passed · 6 failed</div></div>
+  <div class="card"><div class="label">Cost</div>
+    <div class="big" style="font-size:28px">19</div>
+    <div class="bar"><i style="width:19%"></i></div>
+    <div class="meta">1 passed · 7 failed</div></div>
+</div>
+
+<h2>Framework summary</h2>
+<p class="muted">Checks passed and failed against each Well-Architected pillar and each Microsoft cloud security benchmark (MCSB) control. Checks not scored are left out.</p>
+<div class="tw"><table><thead><tr><th>Well-Architected pillar</th><th>Passed</th><th>Failed</th></tr></thead><tbody>
+<tr><td>Cost Optimization</td><td>1</td><td>7</td></tr><tr><td>Reliability</td><td>3</td><td>5</td></tr><tr><td>Security</td><td>14</td><td>30</td></tr></tbody></table></div>
+<div class="tw" style="margin-top:12px"><table><thead><tr><th>MCSB control</th><th>Passed</th><th>Failed</th></tr></thead><tbody>
+<tr><td>DP-3</td><td>5</td><td>3</td></tr><tr><td>DP-8</td><td>0</td><td>1</td></tr><tr><td>IM-1</td><td>2</td><td>6</td></tr><tr><td>IM-3</td><td>0</td><td>2</td></tr><tr><td>IM-6</td><td>0</td><td>1</td></tr><tr><td>NS-1</td><td>1</td><td>3</td></tr><tr><td>NS-2</td><td>2</td><td>10</td></tr><tr><td>PA-7</td><td>2</td><td>0</td></tr><tr><td>PV-2</td><td>2</td><td>2</td></tr><tr><td>PV-4</td><td>0</td><td>1</td></tr><tr><td>PV-6</td><td>0</td><td>1</td></tr></tbody></table></div>
+
+<h2>Findings</h2>
+<div class="finding sev-critical" id="AZ-NET-001">
+  <div class="fhead">
+    <span class="pill critical">critical</span>
+    <h3>Failed: No SSH or RDP open to the Internet</h3>
+  </div>
+  <p class="meta">AZ-NET-001 · Network · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-1 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> An inbound rule that allows SSH or RDP from the Internet exposes servers to constant password-guessing and exploit attempts. It is one of the most common ways cloud servers are breached.</p>
+  <p><strong>Fix.</strong> Remove the rule, or limit its source to known addresses and use Azure Bastion or just-in-time access.</p>
+<ol><li>Open the network security group and find the rules listed in the evidence.</li><li>Delete the rule, or change its source from Internet or * to your office or VPN address range.</li><li>For admin access, use Azure Bastion or Defender for Cloud just-in-time VM access instead.</li></ol><pre>az network nsg rule update -g &lt;resource-group&gt; --nsg-name &lt;nsg&gt; -n &lt;rule&gt; --source-address-prefixes &lt;your-ip&gt;/32</pre><details><summary>Terraform</summary><pre># azurerm_network_security_rule
+source_address_prefix = &#34;&lt;your-ip&gt;/32&#34;   # never &#34;*&#34; or &#34;Internet&#34; for ports 22 and 3389
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>nsg-vm-erp-01</td>
+          <td><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>exposedRules</code>: ["allow-rdp-vendor"]<br><code>checkedPorts</code>: [22, 3389]<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Network/networkSecurityGroups/nsg-vm-erp-01</code></td></tr>
+        <tr><td>nsg-snet-jumpbox</td>
+          <td><code>resourceGroup</code>: rg-platform-tools-cin<br><code>exposedRules</code>: ["allow-ssh"]<br><code>checkedPorts</code>: [22, 3389]<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.Network/networkSecurityGroups/nsg-snet-jumpbox</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview">https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview</a></p></div>
+<div class="finding sev-critical" id="AZ-SQL-002">
+  <div class="fhead">
+    <span class="pill critical">critical</span>
+    <h3>Failed: Azure SQL server firewall does not allow the whole internet</h3>
+  </div>
+  <p class="meta">AZ-SQL-002 · Network · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> A firewall rule covering 0.0.0.0 to 255.255.255.255 lets every address on the internet reach the database login endpoint. Attackers scan for these constantly and try stolen or guessed passwords.</p>
+  <p><strong>Fix.</strong> Delete the allow-all rule and allow only the addresses that need access.</p>
+<ol><li>Find which clients really connect (office, build agents, app outbound IPs).</li><li>Add narrow rules, or better, use private endpoints or virtual network rules.</li><li>Delete the 0.0.0.0 - 255.255.255.255 rule.</li></ol><pre>az sql server firewall-rule delete -g &lt;resource-group&gt; -s &lt;server&gt; -n &lt;rule-name&gt;</pre><details><summary>Terraform</summary><pre># azurerm_mssql_firewall_rule: remove the rule, or narrow it
+start_ip_address = &#34;&lt;your-office-ip&gt;&#34;
+end_ip_address   = &#34;&lt;your-office-ip&gt;&#34;
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>AllowAll-temp</td>
+          <td><code>resourceGroup</code>: rg-shop-db-uat-cin<br><code>location</code>: centralindia<br><code>server</code>: sql-shop-uat-cin<br><code>startIp</code>: 0.0.0.0<br><code>endIp</code>: 255.255.255.255<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-db-uat-cin/providers/Microsoft.Sql/servers/sql-shop-uat-cin/firewallRules/AllowAll-temp</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/azure-sql/database/firewall-configure">https://learn.microsoft.com/azure/azure-sql/database/firewall-configure</a></p></div>
+<div class="finding sev-high" id="AZ-SQL-001">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Azure SQL servers use Microsoft Entra-only authentication</h3>
+  </div>
+  <p class="meta">AZ-SQL-001 · Identity · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-1 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> SQL logins use passwords that get shared, leaked and rarely rotated. With Microsoft Entra-only authentication, every connection goes through an identity that has MFA, conditional access and a central audit trail, and SQL passwords stop working.</p>
+  <p><strong>Fix.</strong> Set a Microsoft Entra admin and turn on Microsoft Entra-only authentication.</p>
+<ol><li>Set a Microsoft Entra admin (preferably a group) on the SQL server.</li><li>Move applications to managed identities or Entra users, and test them.</li><li>Enable &#34;Support only Microsoft Entra authentication for this server&#34; under Microsoft Entra ID.</li></ol><pre>az sql server ad-only-auth enable -g &lt;resource-group&gt; -n &lt;server&gt;</pre><details><summary>Terraform</summary><pre># azurerm_mssql_server
+azuread_administrator {
+  login_username              = &#34;&lt;entra-admin-group&gt;&#34;
+  object_id                   = &#34;&lt;object-id&gt;&#34;
+  azuread_authentication_only = true
+}
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>sql-shop-reports-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-db-prod-cin<br><code>location</code>: centralindia<br><code>entraOnlyAuth</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-db-prod-cin/providers/Microsoft.Sql/servers/sql-shop-reports-prod-cin</code></td></tr>
+        <tr><td>sql-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-db-uat-cin<br><code>location</code>: centralindia<br><code>entraOnlyAuth</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-db-uat-cin/providers/Microsoft.Sql/servers/sql-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/azure-sql/database/authentication-azure-ad-only-authentication">https://learn.microsoft.com/azure/azure-sql/database/authentication-azure-ad-only-authentication</a></p></div>
+<div class="finding sev-high" id="AZ-AKS-002">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: AKS clusters use Entra ID only, with local accounts disabled</h3>
+  </div>
+  <p class="meta">AZ-AKS-002 · Kubernetes (AKS) · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-1 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> Local Kubernetes accounts use static credentials that bypass Entra ID sign-in, conditional access and audit. Anyone holding the admin kubeconfig keeps full control even after leaving.</p>
+  <p><strong>Fix.</strong> Integrate the cluster with Entra ID and disable local accounts.</p>
+<ol><li>Make sure Entra ID integration is enabled and an admin group is set.</li><li>Move any automation from the admin kubeconfig to Entra-based credentials.</li><li>Disable local accounts.</li></ol><pre>az aks update -g &lt;resource-group&gt; -n &lt;cluster&gt; --enable-aad --disable-local-accounts</pre><details><summary>Terraform</summary><pre># azurerm_kubernetes_cluster
+local_account_disabled = true
+azure_active_directory_role_based_access_control { azure_rbac_enabled = true }
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>aks-shop-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-prod-cin<br><code>location</code>: centralindia<br><code>disableLocalAccounts</code>: false<br><code>entraManaged</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-aks-prod-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-prod-cin</code></td></tr>
+        <tr><td>aks-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-uat-cin<br><code>location</code>: centralindia<br><code>disableLocalAccounts</code>: false<br><code>entraManaged</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-aks-uat-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/aks/manage-local-accounts-managed-azure-ad">https://learn.microsoft.com/azure/aks/manage-local-accounts-managed-azure-ad</a></p></div>
+<div class="finding sev-high" id="AZ-COSMOS-002">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Cosmos DB accounts are not open to all networks</h3>
+  </div>
+  <p class="meta">AZ-COSMOS-002 · Network · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> An account that accepts connections from any network relies on its keys alone. A leaked key can then be used from anywhere on the Internet to read or change every database in the account.</p>
+  <p><strong>Fix.</strong> Use private endpoints and disable public access, or limit public access to known networks.</p>
+<ol><li>List the networks and addresses that must reach the account.</li><li>Add a private endpoint, or add IP and virtual network rules in the account&#39;s Networking settings.</li><li>Set public network access to Disabled, or to selected networks only.</li></ol><pre>az cosmosdb update -g &lt;resource-group&gt; -n &lt;account&gt; --public-network-access Disabled</pre><details><summary>Terraform</summary><pre># azurerm_cosmosdb_account
+public_network_access_enabled = false
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>cosmos-shop-catalog-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>ipRules</code>: 0<br><code>vnetFilter</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-shop-catalog-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/cosmos-db/how-to-configure-firewall">https://learn.microsoft.com/azure/cosmos-db/how-to-configure-firewall</a></p></div>
+<div class="finding sev-high" id="AZ-KV-003">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Key Vaults are not open to all networks</h3>
+  </div>
+  <p class="meta">AZ-KV-003 · Network · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> A vault that accepts connections from any network can be reached from the Internet by anyone who gets hold of a credential. A firewall that denies by default limits it to named networks.</p>
+  <p><strong>Fix.</strong> Set the vault firewall to deny by default and allow only the networks that need it, or turn public access off.</p>
+<ol><li>List who and what reaches the vault today (applications, pipelines, admins).</li><li>Add private endpoints or virtual network rules for them, then set the default action to Deny.</li><li>Where private endpoints carry all access, set public network access to Disabled.</li></ol><pre>az keyvault update -g &lt;resource-group&gt; -n &lt;vault&gt; --default-action Deny</pre><details><summary>Terraform</summary><pre># azurerm_key_vault
+public_network_access_enabled = false
+network_acls {
+  default_action = &#34;Deny&#34;
+  bypass         = &#34;AzureServices&#34;
+}
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>kv-payments-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-sec-prod-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>defaultAction</code>: Allow<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-sec-prod-cin/providers/Microsoft.KeyVault/vaults/kv-payments-prod-cin</code></td></tr>
+        <tr><td>kv-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-sec-uat-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>defaultAction</code>: Allow<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-sec-uat-cin/providers/Microsoft.KeyVault/vaults/kv-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/key-vault/general/network-security">https://learn.microsoft.com/azure/key-vault/general/network-security</a></p></div>
+<div class="finding sev-high" id="AZ-NET-002">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Storage, Key Vault and SQL are reached through private endpoints</h3>
+  </div>
+  <p class="meta">AZ-NET-002 · Network · 5 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> Without a private endpoint, data services are reached over public addresses. One wrong firewall setting then exposes data stores to the Internet.</p>
+  <p><strong>Fix.</strong> Add a private endpoint, then turn off public network access.</p>
+<ol><li>Create a private endpoint in the application&#39;s virtual network and link the private DNS zone.</li><li>When applications use the endpoint, set public network access to Disabled.</li></ol>  <details open><summary>Affected resources (5)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>stshopmediaprodcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-prod-cin<br><code>location</code>: centralindia<br><code>type</code>: microsoft.storage/storageaccounts<br><code>privateEndpoints</code>: 0<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-data-prod-cin/providers/Microsoft.Storage/storageAccounts/stshopmediaprodcin</code></td></tr>
+        <tr><td>stshopexportsuatcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>type</code>: microsoft.storage/storageaccounts<br><code>privateEndpoints</code>: 0<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.Storage/storageAccounts/stshopexportsuatcin</code></td></tr>
+        <tr><td>kv-payments-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-sec-prod-cin<br><code>location</code>: centralindia<br><code>type</code>: microsoft.keyvault/vaults<br><code>privateEndpoints</code>: 0<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-sec-prod-cin/providers/Microsoft.KeyVault/vaults/kv-payments-prod-cin</code></td></tr>
+        <tr><td>sql-shop-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-db-prod-cin<br><code>location</code>: centralindia<br><code>type</code>: microsoft.sql/servers<br><code>privateEndpoints</code>: 0<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-db-prod-cin/providers/Microsoft.Sql/servers/sql-shop-prod-cin</code></td></tr>
+        <tr><td>sql-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-db-uat-cin<br><code>location</code>: centralindia<br><code>type</code>: microsoft.sql/servers<br><code>privateEndpoints</code>: 0<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-db-uat-cin/providers/Microsoft.Sql/servers/sql-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/private-link/private-endpoint-overview">https://learn.microsoft.com/azure/private-link/private-endpoint-overview</a></p></div>
+<div class="finding sev-high" id="AZ-NET-004">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Storage accounts deny public network access by default</h3>
+  </div>
+  <p class="meta">AZ-NET-004 · Network · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> A storage account whose firewall allows all networks can be reached from the Internet by anyone who holds a key or a token. A firewall that denies by default limits access to named networks.</p>
+  <p><strong>Fix.</strong> Set the storage firewall to deny by default and allow only the networks that need it, or turn public access off.</p>
+<ol><li>List who and what reaches the account today (applications, pipelines, admins).</li><li>Add private endpoints or virtual network rules for them, then set the default action to Deny.</li><li>Where private endpoints carry all access, set public network access to Disabled.</li></ol><pre>az storage account update -g &lt;resource-group&gt; -n &lt;account&gt; --default-action Deny</pre><details><summary>Terraform</summary><pre># azurerm_storage_account
+public_network_access_enabled = false
+network_rules {
+  default_action = &#34;Deny&#34;
+  bypass         = [&#34;AzureServices&#34;]
+}
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>stshopstaticprodcin</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>defaultAction</code>: Allow<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Storage/storageAccounts/stshopstaticprodcin</code></td></tr>
+        <tr><td>stshopexportsuatcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>defaultAction</code>: Allow<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.Storage/storageAccounts/stshopexportsuatcin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/storage/common/storage-network-security">https://learn.microsoft.com/azure/storage/common/storage-network-security</a></p></div>
+<div class="finding sev-high" id="AZ-NET-006">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: No database ports open to the Internet</h3>
+  </div>
+  <p class="meta">AZ-NET-006 · Network · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-1 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> An inbound rule that lets the Internet reach a database port invites password guessing and exploits against the database itself. Exposed databases are found by automated scanners within hours, and are a common source of data breaches and ransom demands.</p>
+  <p><strong>Fix.</strong> Remove the rule, or limit its source to the application&#39;s own network or known addresses.</p>
+<ol><li>Open the network security group and find the rules listed in the evidence.</li><li>Delete the rule, or change its source from Internet or * to the subnet or addresses that need the database.</li><li>Prefer private endpoints or virtual network integration so the database has no public path at all.</li></ol><pre>az network nsg rule update -g &lt;resource-group&gt; --nsg-name &lt;nsg&gt; -n &lt;rule&gt; --source-address-prefixes &lt;app-subnet-cidr&gt;</pre><details><summary>Terraform</summary><pre># azurerm_network_security_rule
+source_address_prefix = &#34;&lt;app-subnet-cidr&gt;&#34;   # never &#34;*&#34; or &#34;Internet&#34; for database ports
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>nsg-vm-erp-01</td>
+          <td><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>exposedRules</code>: ["allow-sql-anywhere"]<br><code>checkedPorts</code>: [1433, 1521, 3306, 5432, 6379, 6380, 9200, 27017]<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Network/networkSecurityGroups/nsg-vm-erp-01</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview">https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview</a></p></div>
+<div class="finding sev-high" id="AZ-PGSQL-001">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: PostgreSQL and MySQL flexible servers disable public network access</h3>
+  </div>
+  <p class="meta">AZ-PGSQL-001 · Network · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> A database server with a public endpoint can be reached from the Internet whenever a firewall rule allows it, and such rules are often widened in a hurry. Private access keeps the server reachable only from your own networks.</p>
+  <p><strong>Fix.</strong> Reach the server through a private endpoint or virtual network, and disable public access.</p>
+<ol><li>Add a private endpoint for the server, or plan a move to virtual network integration.</li><li>Point applications at the private address and check they still connect.</li><li>Set public network access to Disabled in the server&#39;s Networking settings.</li></ol><pre>az postgres flexible-server update -g &lt;resource-group&gt; -n &lt;server&gt; --public-access Disabled</pre><details><summary>Terraform</summary><pre># azurerm_postgresql_flexible_server / azurerm_mysql_flexible_server
+public_network_access_enabled = false
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>mysql-shop-blog-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>engine</code>: MySQL<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.DBforMySQL/flexibleServers/mysql-shop-blog-prod-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/postgresql/flexible-server/concepts-networking">https://learn.microsoft.com/azure/postgresql/flexible-server/concepts-networking</a> · <a href="https://learn.microsoft.com/azure/mysql/flexible-server/concepts-networking">https://learn.microsoft.com/azure/mysql/flexible-server/concepts-networking</a></p></div>
+<div class="finding sev-high" id="AZ-SQL-003">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Azure SQL servers disable public network access</h3>
+  </div>
+  <p class="meta">AZ-SQL-003 · Network · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> With public network access enabled the server answers connections from the internet, protected only by its firewall rules. Disabling it, and connecting through private endpoints, keeps the database reachable only from inside your own networks.</p>
+  <p><strong>Fix.</strong> Disable public network access and connect through a private endpoint.</p>
+<ol><li>Create a private endpoint for the SQL server in the network your applications use.</li><li>Check that applications connect through the private endpoint (private DNS zone linked).</li><li>Set &#34;Public network access&#34; to Disabled under the server&#39;s Networking settings.</li></ol><pre>az sql server update -g &lt;resource-group&gt; -n &lt;server&gt; --enable-public-network false</pre><details><summary>Terraform</summary><pre># azurerm_mssql_server
+public_network_access_enabled = false
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>sql-shop-reports-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-db-prod-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>privateEndpoints</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-db-prod-cin/providers/Microsoft.Sql/servers/sql-shop-reports-prod-cin</code></td></tr>
+        <tr><td>sql-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-db-uat-cin<br><code>location</code>: centralindia<br><code>publicNetworkAccess</code>: Enabled<br><code>privateEndpoints</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-db-uat-cin/providers/Microsoft.Sql/servers/sql-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/azure-sql/database/connectivity-settings">https://learn.microsoft.com/azure/azure-sql/database/connectivity-settings</a></p></div>
+<div class="finding sev-high" id="AZ-NET-008">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: No Basic SKU load balancers</h3>
+  </div>
+  <p class="meta">AZ-NET-008 · Reliability · 1 resource(s)</p>
+<p class="meta">Maps to: WAF RE:05 (Reliability)</p>  <p><strong>Why it matters.</strong> Microsoft retired the Basic load balancer on 30 September 2025. It is no longer supported and has no SLA, so a fault in it is not covered and may not be fixed. It also has no availability zone support.</p>
+  <p><strong>Fix.</strong> Upgrade each Basic load balancer to the Standard SKU.</p>
+<ol><li>Plan a short outage, because the upgrade recreates the load balancer&#39;s frontends.</li><li>Run Microsoft&#39;s upgrade script, which moves the configuration and backend pools to a Standard load balancer.</li><li>Check that network security groups allow the traffic, because Standard denies inbound by default.</li></ol>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>lb-shop-checkout-old</td>
+          <td><code>resourceGroup</code>: rg-shop-net-prod-cin<br><code>location</code>: centralindia<br><code>sku</code>: Basic<br><code>frontends</code>: 1<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-net-prod-cin/providers/Microsoft.Network/loadBalancers/lb-shop-checkout-old</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/load-balancer/load-balancer-basic-upgrade-guidance">https://learn.microsoft.com/azure/load-balancer/load-balancer-basic-upgrade-guidance</a></p></div>
+<div class="finding sev-high" id="AZ-KV-001">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Key Vaults have soft delete and purge protection</h3>
+  </div>
+  <p class="meta">AZ-KV-001 · Security · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB DP-8 · WAF pillar Security</p>  <p><strong>Why it matters.</strong> Without purge protection, a deleted vault and its keys and secrets can be permanently destroyed at once, by mistake or by an attacker, with no way to recover them.</p>
+  <p><strong>Fix.</strong> Turn on purge protection (soft delete must also be on).</p>
+<ol><li>Note that purge protection cannot be turned off once enabled; this is intended.</li><li>Enable purge protection in the vault&#39;s Properties settings.</li></ol><pre>az keyvault update -g &lt;resource-group&gt; -n &lt;vault&gt; --enable-purge-protection true</pre><details><summary>Terraform</summary><pre># azurerm_key_vault
+purge_protection_enabled = true
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>kv-payments-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-sec-prod-cin<br><code>location</code>: centralindia<br><code>softDelete</code>: true<br><code>purgeProtection</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-sec-prod-cin/providers/Microsoft.KeyVault/vaults/kv-payments-prod-cin</code></td></tr>
+        <tr><td>kv-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-sec-uat-cin<br><code>location</code>: centralindia<br><code>softDelete</code>: true<br><code>purgeProtection</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-sec-uat-cin/providers/Microsoft.KeyVault/vaults/kv-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/key-vault/general/soft-delete-overview">https://learn.microsoft.com/azure/key-vault/general/soft-delete-overview</a></p></div>
+<div class="finding sev-high" id="AZ-REDIS-001">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Azure Cache for Redis has the non-TLS port disabled</h3>
+  </div>
+  <p class="meta">AZ-REDIS-001 · Security · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB DP-3 · WAF SE:07 (Security)</p>  <p><strong>Why it matters.</strong> The non-TLS port (6379) sends the access key and every cached value in clear text. Anyone on the network path can read session tokens, user data or the key itself, and then the whole cache.</p>
+  <p><strong>Fix.</strong> Disable the non-TLS port and connect on port 6380 over TLS.</p>
+<ol><li>Find clients that connect on port 6379 and move them to port 6380 with TLS turned on.</li><li>Disable the non-TLS port in the cache&#39;s Advanced settings.</li></ol><pre>az redis update -g &lt;resource-group&gt; -n &lt;cache&gt; --set enableNonSslPort=false</pre><details><summary>Terraform</summary><pre># azurerm_redis_cache
+non_ssl_port_enabled = false
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>redis-shop-sessions-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>enableNonSslPort</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.Cache/redis/redis-shop-sessions-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/azure-cache-for-redis/cache-configure#access-ports">https://learn.microsoft.com/azure/azure-cache-for-redis/cache-configure#access-ports</a></p></div>
+<div class="finding sev-high" id="AZ-STG-001">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Storage accounts block anonymous blob access</h3>
+  </div>
+  <p class="meta">AZ-STG-001 · Security · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> When anonymous access is allowed at the account level, a single container set to public exposes its files to anyone with the link. Blocking it at the account level removes that risk.</p>
+  <p><strong>Fix.</strong> Disallow anonymous blob access on the storage account.</p>
+<ol><li>Check that no application relies on anonymous reads from these accounts.</li><li>Turn off &#34;Allow Blob anonymous access&#34; in the account&#39;s Configuration settings.</li></ol><pre>az storage account update -g &lt;resource-group&gt; -n &lt;account&gt; --allow-blob-public-access false</pre><details><summary>Terraform</summary><pre># azurerm_storage_account
+allow_nested_items_to_be_public = false
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>stshopstaticprodcin</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>allowBlobPublicAccess</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Storage/storageAccounts/stshopstaticprodcin</code></td></tr>
+        <tr><td>stshopexportsuatcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>allowBlobPublicAccess</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.Storage/storageAccounts/stshopexportsuatcin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/storage/blobs/anonymous-read-access-prevent">https://learn.microsoft.com/azure/storage/blobs/anonymous-read-access-prevent</a></p></div>
+<div class="finding sev-high" id="AZ-VM-001">
+  <div class="fhead">
+    <span class="pill high">high</span>
+    <h3>Failed: Linux virtual machines disable password sign-in</h3>
+  </div>
+  <p class="meta">AZ-VM-001 · Security · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-6 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> A Linux server that accepts passwords can be broken into by guessing them, and bots try this against every reachable address all day. SSH keys cannot be guessed and are not reused across sites the way passwords are.</p>
+  <p><strong>Fix.</strong> Sign in with SSH keys or Entra ID, and turn off password authentication.</p>
+<ol><li>Make sure every admin can sign in with an SSH key or with Entra ID login for Linux.</li><li>Set PasswordAuthentication no in /etc/ssh/sshd_config and restart sshd.</li><li>For new VMs, create them with SSH keys only so the setting is recorded on the VM.</li></ol><details><summary>Terraform</summary><pre># azurerm_linux_virtual_machine
+disable_password_authentication = true
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>vm-uat-02</td>
+          <td><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>disablePasswordAuthentication</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/virtualMachines/vm-uat-02</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-machines/linux/create-ssh-keys-detailed">https://learn.microsoft.com/azure/virtual-machines/linux/create-ssh-keys-detailed</a></p></div>
+<div class="finding sev-medium" id="AZ-COST-001">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: No unattached managed disks</h3>
+  </div>
+  <p class="meta">AZ-COST-001 · Cost · 5 resource(s) · <span class="waste">₹24,425 a month, billed</span></p>
+<p class="meta">Maps to: WAF CO:07 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> An unattached disk is billed every month for its full size but serves no workload. They are usually left behind when virtual machines are deleted.</p>
+  <p><strong>Fix.</strong> Snapshot the disk if its data may be needed, then delete it.</p>
+<ol><li>Confirm with the owner that the data is not needed, or take a snapshot first.</li><li>Delete the disk.</li></ol><pre>az disk delete -g &lt;resource-group&gt; -n &lt;disk&gt;</pre>  <details open><summary>Affected resources (5)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>disk-sqlvm-data-old</td>
+          <td><strong>₹12,480 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-db-prod-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>sizeGb</code>: 1024<br><code>sku</code>: Premium_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-db-prod-cin/providers/Microsoft.Compute/disks/disk-sqlvm-data-old</code></td></tr>
+        <tr><td>disk-vm-erp-01-os</td>
+          <td><strong>₹3,105 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>sizeGb</code>: 256<br><code>sku</code>: Premium_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Compute/disks/disk-vm-erp-01-os</code></td></tr>
+        <tr><td>disk-uat-restore-test</td>
+          <td><strong>₹3,410 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>sizeGb</code>: 512<br><code>sku</code>: StandardSSD_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/disks/disk-uat-restore-test</code></td></tr>
+        <tr><td>disk-vm-uat-02-data</td>
+          <td><strong>₹3,890 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>sizeGb</code>: 1024<br><code>sku</code>: Standard_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/disks/disk-vm-uat-02-data</code></td></tr>
+        <tr><td>disk-jumpbox-old-os</td>
+          <td><strong>₹1,540 a month, billed</strong><br><code>resourceGroup</code>: rg-platform-tools-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>sizeGb</code>: 128<br><code>sku</code>: Premium_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.Compute/disks/disk-jumpbox-old-os</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-machines/disks-find-unattached-portal">https://learn.microsoft.com/azure/virtual-machines/disks-find-unattached-portal</a></p></div>
+<div class="finding sev-medium" id="AZ-COST-005">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: No paid App Service plans without apps</h3>
+  </div>
+  <p class="meta">AZ-COST-005 · Cost · 2 resource(s) · <span class="waste">₹14,770 a month, billed</span></p>
+<p class="meta">Maps to: WAF CO:07 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> A paid App Service plan is billed whether or not any app runs on it. Empty plans are usually left over after apps are moved or deleted.</p>
+  <p><strong>Fix.</strong> Delete empty plans, or move apps from other plans onto them.</p>
+<pre>az appservice plan delete -g &lt;resource-group&gt; -n &lt;plan&gt;</pre>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>asp-shop-legacy-prod</td>
+          <td><strong>₹9,850 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>tier</code>: PremiumV3<br><code>skuName</code>: P2v3<br><code>sites</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Web/serverfarms/asp-shop-legacy-prod</code></td></tr>
+        <tr><td>asp-shop-uat</td>
+          <td><strong>₹4,920 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-web-uat-cin<br><code>location</code>: centralindia<br><code>tier</code>: Standard<br><code>skuName</code>: S1<br><code>sites</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-web-uat-cin/providers/Microsoft.Web/serverfarms/asp-shop-uat</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/app-service/overview-hosting-plans">https://learn.microsoft.com/azure/app-service/overview-hosting-plans</a></p></div>
+<div class="finding sev-medium" id="AZ-COST-006">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: No NAT gateways without a subnet</h3>
+  </div>
+  <p class="meta">AZ-COST-006 · Cost · 2 resource(s) · <span class="waste">₹5,910 a month, billed</span></p>
+<p class="meta">Maps to: WAF CO:07 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> A NAT gateway is billed every hour it exists, whether or not any subnet uses it. One left behind after a migration or test keeps costing money and holds public IP addresses.</p>
+  <p><strong>Fix.</strong> Delete NAT gateways that no subnet uses, after checking nothing is about to use them.</p>
+<ol><li>Confirm with the owner that the gateway is not about to be attached to a subnet.</li><li>Delete the gateway, then delete any public IP addresses or prefixes that only it used.</li></ol><pre>az network nat gateway delete -g &lt;resource-group&gt; -n &lt;nat-gateway&gt;</pre>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>natgw-uat-spike</td>
+          <td><strong>₹2,790 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-net-uat-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>subnetCount</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-net-uat-cin/providers/Microsoft.Network/natGateways/natgw-uat-spike</code></td></tr>
+        <tr><td>natgw-shop-old-prod</td>
+          <td><strong>₹3,120 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-net-prod-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>subnetCount</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-net-prod-cin/providers/Microsoft.Network/natGateways/natgw-shop-old-prod</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/nat-gateway/nat-overview">https://learn.microsoft.com/azure/nat-gateway/nat-overview</a> · <a href="https://azure.microsoft.com/pricing/details/virtual-network/">https://azure.microsoft.com/pricing/details/virtual-network/</a></p></div>
+<div class="finding sev-medium" id="AZ-AI-001">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Azure AI services accounts disable key-based authentication</h3>
+  </div>
+  <p class="meta">AZ-AI-001 · Identity · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-1 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> An API key lets anyone who holds it call the service on your bill and, for Azure OpenAI, send it your data and prompts. Keys leak through code and config files and do not say who used them. Entra ID access is scoped, audited and removed when no longer needed.</p>
+  <p><strong>Fix.</strong> Move applications to Entra ID authentication, then disable key-based access.</p>
+<ol><li>Give the account a custom subdomain if it has none (Entra ID authentication needs one).</li><li>Grant each application a role such as Cognitive Services User and switch it to its managed identity.</li><li>Disable local (key-based) authentication on the account.</li></ol><pre>az resource update --ids &lt;account-id&gt; --set properties.disableLocalAuth=true</pre><details><summary>Terraform</summary><pre># azurerm_cognitive_account
+local_auth_enabled = false
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>oai-shop-support-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>serviceKind</code>: OpenAI<br><code>disableLocalAuth</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.CognitiveServices/accounts/oai-shop-support-prod-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/ai-services/disable-local-auth">https://learn.microsoft.com/azure/ai-services/disable-local-auth</a></p></div>
+<div class="finding sev-medium" id="AZ-COSMOS-001">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Cosmos DB accounts disable key-based authentication</h3>
+  </div>
+  <p class="meta">AZ-COSMOS-001 · Identity · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-1 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> An account key gives full read and write access to every database in the account, never expires on its own, and does not say who used it. Keys end up in config files and scripts and are hard to rotate. Entra ID roles are scoped, audited and removed when a person leaves.</p>
+  <p><strong>Fix.</strong> Move applications to Entra ID role-based access, then disable key-based authentication.</p>
+<ol><li>Grant each application a Cosmos DB data-plane role (for example Cosmos DB Built-in Data Contributor).</li><li>Change the applications to authenticate with their managed identity instead of a key.</li><li>Disable local (key-based) authentication on the account.</li></ol><pre>az cosmosdb update -g &lt;resource-group&gt; -n &lt;account&gt; --disable-local-auth true</pre><details><summary>Terraform</summary><pre># azurerm_cosmosdb_account
+local_authentication_enabled = false
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>cosmos-shop-catalog-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-prod-cin<br><code>location</code>: centralindia<br><code>apiKind</code>: GlobalDocumentDB<br><code>disableLocalAuth</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-data-prod-cin/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-shop-catalog-prod-cin</code></td></tr>
+        <tr><td>cosmos-shop-catalog-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>apiKind</code>: GlobalDocumentDB<br><code>disableLocalAuth</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.DocumentDB/databaseAccounts/cosmos-shop-catalog-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/cosmos-db/how-to-setup-rbac#disable-local-auth">https://learn.microsoft.com/azure/cosmos-db/how-to-setup-rbac#disable-local-auth</a></p></div>
+<div class="finding sev-medium" id="AZ-MSG-001">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Service Bus and Event Hubs namespaces disable SAS key authentication</h3>
+  </div>
+  <p class="meta">AZ-MSG-001 · Identity · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-1 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> A shared access signature key lets anyone who holds it send or read messages, does not say who used it, and usually sits in connection strings in config files. Entra ID roles are scoped to a queue or topic, audited, and removed when an app or person no longer needs them.</p>
+  <p><strong>Fix.</strong> Move clients to Entra ID role-based access, then disable local (SAS) authentication.</p>
+<ol><li>Grant each application a data role, for example Azure Service Bus Data Sender or Azure Event Hubs Data Receiver.</li><li>Change the applications to authenticate with their managed identity instead of a connection string.</li><li>Disable local authentication on the namespace (for Event Hubs, az eventhubs namespace update with the same flag).</li></ol><pre>az servicebus namespace update -g &lt;resource-group&gt; -n &lt;namespace&gt; --disable-local-auth true</pre><details><summary>Terraform</summary><pre># azurerm_servicebus_namespace / azurerm_eventhub_namespace
+local_auth_enabled = false
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>sb-shop-orders-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>service</code>: Service Bus<br><code>sku</code>: Standard<br><code>disableLocalAuth</code>: false<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.ServiceBus/namespaces/sb-shop-orders-prod-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/service-bus-messaging/disable-local-authentication">https://learn.microsoft.com/azure/service-bus-messaging/disable-local-authentication</a> · <a href="https://learn.microsoft.com/azure/event-hubs/authenticate-shared-access-signature">https://learn.microsoft.com/azure/event-hubs/authenticate-shared-access-signature</a></p></div>
+<div class="finding sev-medium" id="AZ-ACR-003">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Container registries are not open to all networks</h3>
+  </div>
+  <p class="meta">AZ-ACR-003 · Network · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> A registry that accepts connections from any network can be pushed to or pulled from anywhere on the Internet with a leaked credential. A poisoned image pushed this way runs in every cluster and app that pulls it.</p>
+  <p><strong>Fix.</strong> Use private endpoints, or limit the registry firewall to known networks (Premium SKU).</p>
+<ol><li>Upgrade the registry to Premium if it is Basic or Standard.</li><li>Add a private endpoint, or firewall rules for the build agents and clusters that use the registry.</li><li>Set public network access to Disabled, or the default action to Deny.</li></ol><pre>az acr update -n &lt;registry&gt; --public-network-enabled false</pre><details><summary>Terraform</summary><pre># azurerm_container_registry (sku = &#34;Premium&#34;)
+public_network_access_enabled = false
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>acrplatformcin</td>
+          <td><code>resourceGroup</code>: rg-platform-tools-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>publicNetworkAccess</code>: Enabled<br><code>defaultAction</code>: Allow<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.ContainerRegistry/registries/acrplatformcin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/container-registry/container-registry-access-selected-networks">https://learn.microsoft.com/azure/container-registry/container-registry-access-selected-networks</a> · <a href="https://learn.microsoft.com/azure/container-registry/container-registry-private-link">https://learn.microsoft.com/azure/container-registry/container-registry-private-link</a></p></div>
+<div class="finding sev-medium" id="AZ-NET-003">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Every subnet has a network security group</h3>
+  </div>
+  <p class="meta">AZ-NET-003 · Network · 3 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-1 · WAF SE:06, SE:04 (Security)</p>  <p><strong>Why it matters.</strong> A subnet with no network security group lets any machine in it be reached from the rest of the network, and from the Internet if it has a public address. A group gives you a rule set you can see and review.</p>
+  <p><strong>Fix.</strong> Attach a network security group to each subnet, starting with deny-by-default inbound rules.</p>
+<ol><li>Create or choose a network security group for the subnet&#39;s role.</li><li>Allow only the traffic the workload needs, then associate the group with the subnet.</li></ol><pre>az network vnet subnet update -g &lt;resource-group&gt; --vnet-name &lt;vnet&gt; -n &lt;subnet&gt; --network-security-group &lt;nsg&gt;</pre><details><summary>Terraform</summary><pre># azurerm_subnet_network_security_group_association
+subnet_id                 = azurerm_subnet.main.id
+network_security_group_id = azurerm_network_security_group.main.id
+</pre></details>  <details open><summary>Affected resources (3)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>snet-app-prod</td>
+          <td><code>resourceGroup</code>: rg-shop-net-prod-cin<br><code>location</code>: centralindia<br><code>vnet</code>: vnet-shop-prod-cin<br><code>nsgId</code>: <br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-net-prod-cin/providers/Microsoft.Network/virtualNetworks/vnet-shop-prod-cin/subnets/snet-app-prod</code></td></tr>
+        <tr><td>snet-aks-uat</td>
+          <td><code>resourceGroup</code>: rg-shop-net-uat-cin<br><code>location</code>: centralindia<br><code>vnet</code>: vnet-shop-uat-cin<br><code>nsgId</code>: <br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-net-uat-cin/providers/Microsoft.Network/virtualNetworks/vnet-shop-uat-cin/subnets/snet-aks-uat</code></td></tr>
+        <tr><td>snet-shared-services</td>
+          <td><code>resourceGroup</code>: rg-platform-net-cin<br><code>location</code>: centralindia<br><code>vnet</code>: vnet-platform-hub-cin<br><code>nsgId</code>: <br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-net-cin/providers/Microsoft.Network/virtualNetworks/vnet-platform-hub-cin/subnets/snet-shared-services</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview">https://learn.microsoft.com/azure/virtual-network/network-security-groups-overview</a></p></div>
+<div class="finding sev-medium" id="AZ-AKS-005">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: AKS node pools are spread across availability zones</h3>
+  </div>
+  <p class="meta">AZ-AKS-005 · Reliability · 2 resource(s)</p>
+<p class="meta">Maps to: WAF RE:05 (Reliability)</p>  <p><strong>Why it matters.</strong> A node pool in a single zone goes down with that zone. Spreading nodes across zones keeps workloads running through a datacentre outage.</p>
+  <p><strong>Fix.</strong> Create node pools across at least two availability zones (zones are set at creation).</p>
+<ol><li>Check the region supports availability zones.</li><li>Create a replacement pool with zones 1, 2 and 3, move workloads, then remove the old pool.</li></ol><pre>az aks nodepool add -g &lt;resource-group&gt; --cluster-name &lt;cluster&gt; -n pool2 --zones 1 2 3</pre>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>aks-shop-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-prod-cin<br><code>location</code>: centralindia<br><code>pools</code>: 1<br><code>poolsWithoutZones</code>: 1<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-aks-prod-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-prod-cin</code></td></tr>
+        <tr><td>aks-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-uat-cin<br><code>location</code>: centralindia<br><code>pools</code>: 2<br><code>poolsWithoutZones</code>: 2<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-aks-uat-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/aks/availability-zones">https://learn.microsoft.com/azure/aks/availability-zones</a></p></div>
+<div class="finding sev-medium" id="AZ-AKS-007">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: AKS clusters have an automatic upgrade channel set</h3>
+  </div>
+  <p class="meta">AZ-AKS-007 · Reliability · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB PV-6 · WAF SE:08 (Security)</p>  <p><strong>Why it matters.</strong> A cluster with no upgrade channel stays on its Kubernetes version until someone remembers to upgrade it. Old versions fall out of support and miss security patches.</p>
+  <p><strong>Fix.</strong> Set an automatic upgrade channel, for example patch or stable.</p>
+<ol><li>Pick a channel. &#34;patch&#34; applies only security and bug-fix releases and is the safest start.</li><li>Set a planned maintenance window so upgrades happen at a quiet time.</li></ol><pre>az aks update -g &lt;resource-group&gt; -n &lt;cluster&gt; --auto-upgrade-channel patch</pre><details><summary>Terraform</summary><pre># azurerm_kubernetes_cluster
+automatic_upgrade_channel = &#34;patch&#34;
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>aks-shop-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-prod-cin<br><code>location</code>: centralindia<br><code>upgradeChannel</code>: none<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-aks-prod-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-prod-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/aks/auto-upgrade-cluster">https://learn.microsoft.com/azure/aks/auto-upgrade-cluster</a></p></div>
+<div class="finding sev-medium" id="AZ-REL-001">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Production AKS clusters use the Standard tier with an uptime SLA</h3>
+  </div>
+  <p class="meta">AZ-REL-001 · Reliability · 1 resource(s)</p>
+<p class="meta">Maps to: WAF pillar Reliability</p>  <p><strong>Why it matters.</strong> The Free tier has no financially backed uptime SLA for the control plane. Production clusters need the Standard tier so the API server stays available under load.</p>
+  <p><strong>Fix.</strong> Move production clusters to the Standard tier.</p>
+<pre>az aks update -g &lt;resource-group&gt; -n &lt;cluster&gt; --tier standard</pre><details><summary>Terraform</summary><pre># azurerm_kubernetes_cluster
+sku_tier = &#34;Standard&#34;
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>aks-shop-prod-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-prod-cin<br><code>location</code>: centralindia<br><code>environment</code>: prod<br><code>tier</code>: Free<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-aks-prod-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-prod-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/aks/free-standard-pricing-tiers">https://learn.microsoft.com/azure/aks/free-standard-pricing-tiers</a></p></div>
+<div class="finding sev-medium" id="AZ-REL-002">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Production virtual machines are in an availability zone</h3>
+  </div>
+  <p class="meta">AZ-REL-002 · Reliability · 1 resource(s)</p>
+<p class="meta">Maps to: WAF RE:05 (Reliability)</p>  <p><strong>Why it matters.</strong> A virtual machine outside an availability zone can be lost with a single datacentre fault. Zones keep a production workload running when one building has a power or cooling failure.</p>
+  <p><strong>Fix.</strong> Recreate the VM in an availability zone (a VM&#39;s zone cannot be changed in place).</p>
+<ol><li>Check the region supports availability zones.</li><li>Snapshot the disks, create the VM in a zone from the snapshots, then cut traffic over.</li><li>For real resilience, run two or more VMs in different zones behind a load balancer.</li></ol><pre>az vm create -g &lt;resource-group&gt; -n &lt;vm&gt; --image &lt;image&gt; --zone 1</pre><details><summary>Terraform</summary><pre># azurerm_linux_virtual_machine
+zone = &#34;1&#34;
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>vm-web-01</td>
+          <td><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>environment</code>: prod<br><code>zones</code>: null<br><code>zoneCount</code>: 0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Compute/virtualMachines/vm-web-01</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/reliability/reliability-virtual-machines">https://learn.microsoft.com/azure/reliability/reliability-virtual-machines</a></p></div>
+<div class="finding sev-medium" id="AZ-REL-003">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Production storage accounts use zone- or geo-redundant replication</h3>
+  </div>
+  <p class="meta">AZ-REL-003 · Reliability · 1 resource(s)</p>
+<p class="meta">Maps to: WAF RE:05 (Reliability)</p>  <p><strong>Why it matters.</strong> Locally redundant storage keeps all copies in one datacentre. A fire or flood there can lose production data. Zone or geo replication keeps copies in separate buildings or regions.</p>
+  <p><strong>Fix.</strong> Change the replication type to ZRS, GRS or GZRS.</p>
+<ol><li>Pick ZRS for protection inside the region, or GZRS for protection across regions too.</li><li>Change the redundancy setting on the account; Azure converts it online or on request.</li></ol><pre>az storage account update -g &lt;resource-group&gt; -n &lt;account&gt; --sku Standard_ZRS</pre><details><summary>Terraform</summary><pre># azurerm_storage_account
+account_replication_type = &#34;ZRS&#34;
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>stshopordersprodcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-prod-cin<br><code>location</code>: centralindia<br><code>environment</code>: prod<br><code>skuName</code>: Standard_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-data-prod-cin/providers/Microsoft.Storage/storageAccounts/stshopordersprodcin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/storage/common/redundancy-migration">https://learn.microsoft.com/azure/storage/common/redundancy-migration</a></p></div>
+<div class="finding sev-medium" id="AZ-STG-004">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Storage accounts disable shared key access</h3>
+  </div>
+  <p class="meta">AZ-STG-004 · Security · 3 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-1 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> An account key gives full control of everything in the account and cannot be limited to one person or one task. Turning shared key access off forces clients to use Microsoft Entra identities, which can be scoped, audited and revoked.</p>
+  <p><strong>Fix.</strong> Disallow shared key authorization on the storage account.</p>
+<ol><li>Move applications and tools to Microsoft Entra authentication (managed identity and RBAC roles).</li><li>Check that nothing still uses account keys or key-signed SAS tokens; they stop working once this is off.</li><li>Set &#34;Allow storage account key access&#34; to Disabled in the account&#39;s Configuration settings.</li></ol><pre>az storage account update -g &lt;resource-group&gt; -n &lt;account&gt; --allow-shared-key-access false</pre><details><summary>Terraform</summary><pre># azurerm_storage_account
+shared_access_key_enabled = false
+</pre></details>  <details open><summary>Affected resources (3)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>stshopmediaprodcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-prod-cin<br><code>location</code>: centralindia<br><code>allowSharedKeyAccess</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-data-prod-cin/providers/Microsoft.Storage/storageAccounts/stshopmediaprodcin</code></td></tr>
+        <tr><td>stshopstaticprodcin</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>allowSharedKeyAccess</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Storage/storageAccounts/stshopstaticprodcin</code></td></tr>
+        <tr><td>stshopexportsuatcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>allowSharedKeyAccess</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.Storage/storageAccounts/stshopexportsuatcin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/storage/common/shared-key-authorization-prevent">https://learn.microsoft.com/azure/storage/common/shared-key-authorization-prevent</a></p></div>
+<div class="finding sev-medium" id="AZ-STG-005">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Storage accounts block cross-tenant object replication</h3>
+  </div>
+  <p class="meta">AZ-STG-005 · Security · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB PV-2 · WAF SE:08 (Security)</p>  <p><strong>Why it matters.</strong> Object replication can copy every blob in a container to a storage account in another Entra tenant. Anyone who can set up a replication policy could then move your data out of your organisation&#39;s control without it looking like a download.</p>
+  <p><strong>Fix.</strong> Turn off &#34;Allow cross-tenant replication&#34; on each account that does not need it.</p>
+<ol><li>Check whether the account has object replication policies to an account in another tenant.</li><li>If none are needed, turn off &#34;Allow cross-tenant replication&#34; in the account&#39;s Object replication settings.</li></ol><pre>az storage account update -g &lt;resource-group&gt; -n &lt;account&gt; --allow-cross-tenant-replication false</pre><details><summary>Terraform</summary><pre># azurerm_storage_account
+cross_tenant_replication_enabled = false
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>stshopexportsuatcin</td>
+          <td><code>resourceGroup</code>: rg-shop-data-uat-cin<br><code>location</code>: centralindia<br><code>allowCrossTenantReplication</code>: true<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-data-uat-cin/providers/Microsoft.Storage/storageAccounts/stshopexportsuatcin</code></td></tr>
+        <tr><td>stplatformlogscin</td>
+          <td><code>resourceGroup</code>: rg-platform-logs-cin<br><code>location</code>: centralindia<br><code>allowCrossTenantReplication</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-logs-cin/providers/Microsoft.Storage/storageAccounts/stplatformlogscin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/storage/blobs/object-replication-prevent-cross-tenant-policies">https://learn.microsoft.com/azure/storage/blobs/object-replication-prevent-cross-tenant-policies</a></p></div>
+<div class="finding sev-medium" id="AZ-VM-002">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Virtual machines use Trusted Launch</h3>
+  </div>
+  <p class="meta">AZ-VM-002 · Security · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB PV-4 · WAF SE:08 (Security)</p>  <p><strong>Why it matters.</strong> Without Trusted Launch a VM has no secure boot and no virtual TPM, so malware that installs itself in the boot chain (a bootkit or rootkit) can load before the operating system and its defences, and stay hidden from them.</p>
+  <p><strong>Fix.</strong> Enable Trusted Launch with secure boot and vTPM.</p>
+<ol><li>Check the VM is Generation 2 and its size supports Trusted Launch.</li><li>Take a backup, stop (deallocate) the VM and upgrade its security type to Trusted Launch.</li><li>Turn on secure boot and vTPM and start the VM.</li></ol><pre>az vm update -g &lt;resource-group&gt; -n &lt;vm&gt; --security-type TrustedLaunch --enable-secure-boot true --enable-vtpm true</pre><details><summary>Terraform</summary><pre># azurerm_linux_virtual_machine / azurerm_windows_virtual_machine
+secure_boot_enabled = true
+vtpm_enabled        = true
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>vm-uat-02</td>
+          <td><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>securityType</code>: Standard<br><code>secureBoot</code>: null<br><code>vTpm</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/virtualMachines/vm-uat-02</code></td></tr>
+        <tr><td>vm-buildagent-01</td>
+          <td><code>resourceGroup</code>: rg-platform-tools-cin<br><code>location</code>: centralindia<br><code>securityType</code>: Standard<br><code>secureBoot</code>: null<br><code>vTpm</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.Compute/virtualMachines/vm-buildagent-01</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-machines/trusted-launch">https://learn.microsoft.com/azure/virtual-machines/trusted-launch</a> · <a href="https://learn.microsoft.com/azure/virtual-machines/trusted-launch-existing-vm">https://learn.microsoft.com/azure/virtual-machines/trusted-launch-existing-vm</a></p></div>
+<div class="finding sev-medium" id="AZ-VM-004">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: Managed disks cannot be exported from any network</h3>
+  </div>
+  <p class="meta">AZ-VM-004 · Security · 7 resource(s)</p>
+<p class="meta">Maps to: MCSB NS-2 · WAF SE:06 (Security)</p>  <p><strong>Why it matters.</strong> With AllowAll, anyone allowed to export a disk can create a download link (a SAS URL) for it and copy the whole disk, with all its data, from anywhere on the Internet. Limiting export to a private network, or blocking it, stops a full copy of a server leaving that way.</p>
+  <p><strong>Fix.</strong> Set each disk&#39;s network access to Deny all, or to private access through a disk access resource.</p>
+<ol><li>Check whether anyone needs to export or import the disk (backups through Azure Backup are not affected).</li><li>Set network access to Disable public and private access, or to private access only.</li></ol><pre>az disk update -g &lt;resource-group&gt; -n &lt;disk&gt; --network-access-policy DenyAll</pre><details><summary>Terraform</summary><pre># azurerm_managed_disk
+network_access_policy = &#34;DenyAll&#34;
+</pre></details>  <details><summary>Affected resources (7)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>disk-sqlvm-data-old</td>
+          <td><code>resourceGroup</code>: rg-shop-db-prod-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-db-prod-cin/providers/Microsoft.Compute/disks/disk-sqlvm-data-old</code></td></tr>
+        <tr><td>disk-vm-erp-01-os</td>
+          <td><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Compute/disks/disk-vm-erp-01-os</code></td></tr>
+        <tr><td>disk-uat-restore-test</td>
+          <td><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/disks/disk-uat-restore-test</code></td></tr>
+        <tr><td>disk-vm-uat-02-data</td>
+          <td><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/disks/disk-vm-uat-02-data</code></td></tr>
+        <tr><td>disk-jumpbox-old-os</td>
+          <td><code>resourceGroup</code>: rg-platform-tools-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Unattached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.Compute/disks/disk-jumpbox-old-os</code></td></tr>
+        <tr><td>disk-vm-uat-02-os</td>
+          <td><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Attached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/disks/disk-vm-uat-02-os</code></td></tr>
+        <tr><td>disk-vm-buildagent-01-os</td>
+          <td><code>resourceGroup</code>: rg-platform-tools-cin<br><code>location</code>: centralindia<br><code>diskState</code>: Attached<br><code>networkAccessPolicy</code>: AllowAll<br><code>publicNetworkAccess</code>: Enabled<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.Compute/disks/disk-vm-buildagent-01-os</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-machines/disks-restrict-import-export-overview">https://learn.microsoft.com/azure/virtual-machines/disks-restrict-import-export-overview</a></p></div>
+<div class="finding sev-medium" id="AZ-WEB-002">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: App Service apps require TLS 1.2 or later</h3>
+  </div>
+  <p class="meta">AZ-WEB-002 · Security · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB DP-3 · WAF SE:07 (Security)</p>  <p><strong>Why it matters.</strong> TLS 1.0 and 1.1 have known weaknesses and fail most security reviews and payment-card audits. An app that still accepts them lets clients connect over weaker encryption.</p>
+  <p><strong>Fix.</strong> Set the app&#39;s minimum inbound TLS version to 1.2.</p>
+<ol><li>Confirm the app&#39;s clients support TLS 1.2 (all current browsers and SDKs do).</li><li>Set &#34;Minimum Inbound TLS Version&#34; to 1.2 in the app&#39;s Configuration &gt; General settings.</li></ol><pre>az webapp config set -g &lt;resource-group&gt; -n &lt;app&gt; --min-tls-version 1.2</pre><details><summary>Terraform</summary><pre># azurerm_linux_web_app / azurerm_windows_web_app
+site_config {
+  minimum_tls_version = &#34;1.2&#34;
+}
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>app-shop-legacy-prod</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>appKind</code>: app<br><code>minTlsVersion</code>: 1.0<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Web/sites/app-shop-legacy-prod</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/app-service/overview-tls">https://learn.microsoft.com/azure/app-service/overview-tls</a></p></div>
+<div class="finding sev-medium" id="AZ-WEB-004">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: App Service apps do not allow plain FTP</h3>
+  </div>
+  <p class="meta">AZ-WEB-004 · Security · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB DP-3 · WAF SE:07 (Security)</p>  <p><strong>Why it matters.</strong> Plain FTP sends deployment credentials and code unencrypted. Anyone on the network path can capture them and deploy their own code to the app.</p>
+  <p><strong>Fix.</strong> Set FTP state to &#34;FTPS only&#34;, or &#34;Disabled&#34; if nobody deploys over FTP.</p>
+<ol><li>Check whether any pipeline or person still deploys over FTP.</li><li>Set &#34;FTP state&#34; in the app&#39;s Configuration &gt; General settings.</li></ol><pre>az webapp config set -g &lt;resource-group&gt; -n &lt;app&gt; --ftps-state Disabled</pre><details><summary>Terraform</summary><pre># azurerm_linux_web_app / azurerm_windows_web_app
+site_config {
+  ftps_state = &#34;Disabled&#34;
+}
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>app-shop-legacy-prod</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>appKind</code>: app<br><code>ftpsState</code>: AllAllowed<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Web/sites/app-shop-legacy-prod</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/app-service/deploy-ftp">https://learn.microsoft.com/azure/app-service/deploy-ftp</a></p></div>
+<div class="finding sev-medium" id="AZ-WEB-006">
+  <div class="fhead">
+    <span class="pill medium">medium</span>
+    <h3>Failed: App Service apps do not allow CORS requests from every origin</h3>
+  </div>
+  <p class="meta">AZ-WEB-006 · Security · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB PV-2 · WAF SE:08 (Security)</p>  <p><strong>Why it matters.</strong> An allowed origin of * lets any website, including a malicious one a user happens to visit, call the app from that user&#39;s browser and read the responses. Listing only your own front-end addresses keeps other sites from using the app&#39;s API.</p>
+  <p><strong>Fix.</strong> Replace * with the exact origins of your own front ends.</p>
+<ol><li>List the websites that call this app from a browser.</li><li>In the app&#39;s CORS settings, remove * and add those origins only.</li></ol><pre>az webapp cors remove -g &lt;resource-group&gt; -n &lt;app&gt; --allowed-origins &#34;*&#34;</pre><details><summary>Terraform</summary><pre># azurerm_linux_web_app / azurerm_windows_web_app
+site_config {
+  cors {
+    allowed_origins = [&#34;https://www.example.com&#34;]   # never &#34;*&#34;
+  }
+}
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>app-shop-legacy-prod</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>appKind</code>: app<br><code>corsAllowedOrigins</code>: ["*"]<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Web/sites/app-shop-legacy-prod</code></td></tr>
+        <tr><td>app-shop-uat</td>
+          <td><code>resourceGroup</code>: rg-shop-web-uat-cin<br><code>location</code>: centralindia<br><code>appKind</code>: app,linux<br><code>corsAllowedOrigins</code>: ["*"]<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-web-uat-cin/providers/Microsoft.Web/sites/app-shop-uat</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/app-service/app-service-web-tutorial-rest-api#add-cors-functionality">https://learn.microsoft.com/azure/app-service/app-service-web-tutorial-rest-api#add-cors-functionality</a></p></div>
+<div class="finding sev-low" id="AZ-COST-002">
+  <div class="fhead">
+    <span class="pill low">low</span>
+    <h3>Failed: No unused public IP addresses</h3>
+  </div>
+  <p class="meta">AZ-COST-002 · Cost · 5 resource(s) · <span class="waste">₹1,528 a month, ₹1,208 billed, ₹320 list-price estimate</span></p>
+<p class="meta">Maps to: WAF CO:07 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> A static public IP that is not attached to anything is still billed, and an unused public address is easy to forget and later attach to the wrong resource.</p>
+  <p><strong>Fix.</strong> Delete public IPs that are not attached to a network interface, load balancer or NAT gateway.</p>
+<pre>az network public-ip delete -g &lt;resource-group&gt; -n &lt;public-ip&gt;</pre>  <details open><summary>Affected resources (5)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>pip-lb-old-checkout</td>
+          <td><strong>₹302 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-net-prod-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>allocation</code>: Static<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-net-prod-cin/providers/Microsoft.Network/publicIPAddresses/pip-lb-old-checkout</code></td></tr>
+        <tr><td>pip-vm-erp-01</td>
+          <td><strong>₹302 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>allocation</code>: Static<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Network/publicIPAddresses/pip-vm-erp-01</code></td></tr>
+        <tr><td>pip-uat-test-1</td>
+          <td><strong>₹302 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>allocation</code>: Static<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Network/publicIPAddresses/pip-uat-test-1</code></td></tr>
+        <tr><td>pip-uat-test-2</td>
+          <td><strong>₹302 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>allocation</code>: Static<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Network/publicIPAddresses/pip-uat-test-2</code></td></tr>
+        <tr><td>pip-vpn-trial</td>
+          <td><strong>₹320 a month, list-price estimate</strong><br><code>resourceGroup</code>: rg-platform-tools-cin<br><code>location</code>: centralindia<br><code>sku</code>: Standard<br><code>allocation</code>: Static<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d003/resourceGroups/rg-platform-tools-cin/providers/Microsoft.Network/publicIPAddresses/pip-vpn-trial</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-addresses">https://learn.microsoft.com/azure/virtual-network/ip-services/public-ip-addresses</a></p></div>
+<div class="finding sev-low" id="AZ-COST-004">
+  <div class="fhead">
+    <span class="pill low">low</span>
+    <h3>Failed: No disk snapshots older than 90 days</h3>
+  </div>
+  <p class="meta">AZ-COST-004 · Cost · 3 resource(s) · <span class="waste">₹7,035 a month, billed</span></p>
+<p class="meta">Maps to: WAF CO:07, CO:10 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> Snapshots are often taken before a change and then forgotten. Old snapshots keep billing every month long after anyone could need them.</p>
+  <p><strong>Fix.</strong> Delete snapshots that are no longer needed, and use Azure Backup policies for retention.</p>
+<pre>az snapshot delete -g &lt;resource-group&gt; -n &lt;snapshot&gt;</pre>  <details open><summary>Affected resources (3)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>snap-sqlvm-before-migration</td>
+          <td><strong>₹3,980 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-db-prod-cin<br><code>location</code>: centralindia<br><code>sizeGb</code>: 1024<br><code>ageDays</code>: 412<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-db-prod-cin/providers/Microsoft.Compute/snapshots/snap-sqlvm-before-migration</code></td></tr>
+        <tr><td>snap-erp-pre-upgrade</td>
+          <td><strong>₹1,010 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-prod-cin<br><code>location</code>: centralindia<br><code>sizeGb</code>: 256<br><code>ageDays</code>: 230<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-app-prod-cin/providers/Microsoft.Compute/snapshots/snap-erp-pre-upgrade</code></td></tr>
+        <tr><td>snap-uat-golden-image</td>
+          <td><strong>₹2,045 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>sizeGb</code>: 512<br><code>ageDays</code>: 140<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/snapshots/snap-uat-golden-image</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-machines/snapshot-copy-managed-disk">https://learn.microsoft.com/azure/virtual-machines/snapshot-copy-managed-disk</a></p></div>
+<div class="finding sev-low" id="AZ-COST-007">
+  <div class="fhead">
+    <span class="pill low">low</span>
+    <h3>Failed: No Premium SSD disks on deallocated virtual machines</h3>
+  </div>
+  <p class="meta">AZ-COST-007 · Cost · 1 resource(s) · <span class="waste">₹1,536 a month, list-price estimate</span></p>
+<p class="meta">Maps to: WAF CO:07 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> A deallocated VM stops compute charges, but its disks are billed in full. A Premium SSD on a VM that stays off for long periods costs about twice a Standard SSD of the same size.</p>
+  <p><strong>Fix.</strong> Move disks of long-term deallocated VMs to Standard SSD, or delete the VM if no longer needed.</p>
+<ol><li>Confirm the VM will stay off for weeks, not days (the change needs the VM to be deallocated).</li><li>Change the disk&#39;s performance tier to Standard SSD, and change it back before the VM returns to production.</li></ol><pre>az disk update -g &lt;resource-group&gt; -n &lt;disk&gt; --sku StandardSSD_LRS</pre><details><summary>Terraform</summary><pre># azurerm_managed_disk
+storage_account_type = &#34;StandardSSD_LRS&#34;
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>disk-vm-uat-02-os</td>
+          <td><strong>₹1,536 a month, list-price estimate</strong><br><code>resourceGroup</code>: rg-shop-app-uat-cin<br><code>location</code>: centralindia<br><code>vm</code>: vm-uat-02<br><code>powerState</code>: PowerState/deallocated<br><code>sizeGb</code>: 256<br><code>sku</code>: Premium_LRS<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-app-uat-cin/providers/Microsoft.Compute/disks/disk-vm-uat-02-os</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/virtual-machines/disks-convert-types">https://learn.microsoft.com/azure/virtual-machines/disks-convert-types</a></p></div>
+<div class="finding sev-low" id="AZ-COST-008">
+  <div class="fhead">
+    <span class="pill low">low</span>
+    <h3>Failed: No private DNS zones without a virtual network link</h3>
+  </div>
+  <p class="meta">AZ-COST-008 · Cost · 2 resource(s) · <span class="waste">₹78 a month, billed</span></p>
+<p class="meta">Maps to: WAF CO:07 (Cost Optimization)</p>  <p><strong>Why it matters.</strong> A private DNS zone answers only for the virtual networks linked to it. A zone with no links resolves nothing for anyone, yet is still billed every month. These are usually left behind after a private endpoint or a network was deleted.</p>
+  <p><strong>Fix.</strong> Delete private DNS zones that no network uses, or link them to the network that needs them.</p>
+<ol><li>Check with the owner whether a network is about to be linked to the zone.</li><li>Link the zone to the right virtual network, or delete it.</li></ol><pre>az network private-dns zone delete -g &lt;resource-group&gt; -n &lt;zone&gt;</pre>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>privatelink.vaultcore.azure.net</td>
+          <td><strong>₹39 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-net-uat-cin<br><code>location</code>: global<br><code>links</code>: 0<br><code>recordSets</code>: 1<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-net-uat-cin/providers/Microsoft.Network/privateDnsZones/privatelink.vaultcore.azure.net</code></td></tr>
+        <tr><td>shop-legacy.internal</td>
+          <td><strong>₹39 a month, billed</strong><br><code>resourceGroup</code>: rg-shop-net-prod-cin<br><code>location</code>: global<br><code>links</code>: 0<br><code>recordSets</code>: 12<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-net-prod-cin/providers/Microsoft.Network/privateDnsZones/shop-legacy.internal</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/dns/private-dns-virtual-network-links">https://learn.microsoft.com/azure/dns/private-dns-virtual-network-links</a> · <a href="https://azure.microsoft.com/pricing/details/dns/">https://azure.microsoft.com/pricing/details/dns/</a></p></div>
+<div class="finding sev-low" id="AZ-WEB-003">
+  <div class="fhead">
+    <span class="pill low">low</span>
+    <h3>Failed: App Service apps use a managed identity</h3>
+  </div>
+  <p class="meta">AZ-WEB-003 · Identity · 2 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-3 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> An app without a managed identity has to keep passwords or keys in its settings to reach databases, Key Vault or storage. A managed identity lets Azure issue the credentials, so there is no secret to leak or rotate.</p>
+  <p><strong>Fix.</strong> Turn on a managed identity for each app and grant it access to what it uses.</p>
+<ol><li>List the secrets and connection strings the app uses to reach other Azure services.</li><li>Enable a system-assigned identity, or attach a user-assigned one.</li><li>Grant that identity the needed role on each service, switch the app to it, and remove the old secret.</li></ol><pre>az webapp identity assign -g &lt;resource-group&gt; -n &lt;app&gt;</pre><details><summary>Terraform</summary><pre># azurerm_linux_web_app / azurerm_windows_web_app
+identity {
+  type = &#34;SystemAssigned&#34;
+}
+</pre></details>  <details open><summary>Affected resources (2)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>app-shop-legacy-prod</td>
+          <td><code>resourceGroup</code>: rg-shop-web-prod-cin<br><code>location</code>: centralindia<br><code>identityType</code>: None<br><code>appKind</code>: app<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d001/resourceGroups/rg-shop-web-prod-cin/providers/Microsoft.Web/sites/app-shop-legacy-prod</code></td></tr>
+        <tr><td>app-shop-uat</td>
+          <td><code>resourceGroup</code>: rg-shop-web-uat-cin<br><code>location</code>: centralindia<br><code>identityType</code>: None<br><code>appKind</code>: app,linux<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-web-uat-cin/providers/Microsoft.Web/sites/app-shop-uat</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/app-service/overview-managed-identity">https://learn.microsoft.com/azure/app-service/overview-managed-identity</a></p></div>
+<div class="finding sev-low" id="AZ-AKS-010">
+  <div class="fhead">
+    <span class="pill low">low</span>
+    <h3>Failed: AKS clusters have workload identity enabled</h3>
+  </div>
+  <p class="meta">AZ-AKS-010 · Kubernetes (AKS) · 1 resource(s)</p>
+<p class="meta">Maps to: MCSB IM-3 · WAF SE:05 (Security)</p>  <p><strong>Why it matters.</strong> Without workload identity, pods that call Azure usually carry a client secret or connection string, stored as a Kubernetes secret, that can leak and is rarely rotated. Workload identity lets each pod use an Entra ID identity instead, with no secret to steal.</p>
+  <p><strong>Fix.</strong> Enable the OIDC issuer and workload identity, then move pods off stored secrets.</p>
+<ol><li>Enable the OIDC issuer and workload identity on the cluster.</li><li>For each app, create a managed identity with a federated credential for its service account.</li><li>Replace the app&#39;s stored secrets with the identity, then delete the secrets.</li></ol><pre>az aks update -g &lt;resource-group&gt; -n &lt;cluster&gt; --enable-oidc-issuer --enable-workload-identity</pre><details><summary>Terraform</summary><pre># azurerm_kubernetes_cluster
+oidc_issuer_enabled       = true
+workload_identity_enabled = true
+</pre></details>  <details open><summary>Affected resources (1)</summary>
+    <div class="tw"><table>
+      <thead><tr><th style="width:20%">Name</th><th style="width:42%">Evidence</th><th>Resource ID</th></tr></thead>
+      <tbody>
+        <tr><td>aks-shop-uat-cin</td>
+          <td><code>resourceGroup</code>: rg-shop-aks-uat-cin<br><code>location</code>: centralindia<br><code>workloadIdentity</code>: null<br><code>oidcIssuer</code>: null<br></td>
+          <td><code>/subscriptions/00000000-0000-0000-0000-00000000d002/resourceGroups/rg-shop-aks-uat-cin/providers/Microsoft.ContainerService/managedClusters/aks-shop-uat-cin</code></td></tr>
+      </tbody></table></div>
+  </details>
+<p class="meta">Reference: <a href="https://learn.microsoft.com/azure/aks/workload-identity-overview">https://learn.microsoft.com/azure/aks/workload-identity-overview</a></p></div>
+
+<h2>Appendix A · Passed checks</h2>
+<div class="tw"><table><thead><tr><th>Check</th><th>Title</th><th>Area</th><th>Resources</th></tr></thead><tbody>
+<tr><td><code>AZ-ACR-001</code></td><td>Container registries have the admin user disabled</td><td>Identity</td><td>2</td></tr><tr><td><code>AZ-ACR-002</code></td><td>Container registries do not allow anonymous pull</td><td>Security</td><td>2</td></tr><tr><td><code>AZ-AKS-003</code></td><td>AKS API server is private or limited to authorised IP ranges</td><td>Kubernetes (AKS)</td><td>2</td></tr><tr><td><code>AZ-AKS-004</code></td><td>AKS clusters separate system and user node pools</td><td>Kubernetes (AKS)</td><td>2</td></tr><tr><td><code>AZ-AKS-006</code></td><td>AKS clusters have the Azure Policy add-on enabled</td><td>Security</td><td>2</td></tr><tr><td><code>AZ-AKS-008</code></td><td>AKS clusters enforce a network policy</td><td>Network</td><td>2</td></tr><tr><td><code>AZ-AKS-009</code></td><td>AKS clusters have Kubernetes RBAC enabled</td><td>Kubernetes (AKS)</td><td>2</td></tr><tr><td><code>AZ-COST-003</code></td><td>Stopped virtual machines are deallocated</td><td>Cost</td><td>4</td></tr><tr><td><code>AZ-KV-002</code></td><td>Key Vaults use the Azure RBAC permission model</td><td>Identity</td><td>4</td></tr><tr><td><code>AZ-NET-005</code></td><td>Virtual machines have no public IP on their network interface</td><td>Network</td><td>4</td></tr><tr><td><code>AZ-NET-007</code></td><td>No Basic SKU public IP addresses</td><td>Reliability</td><td>7</td></tr><tr><td><code>AZ-REDIS-002</code></td><td>Azure Cache for Redis requires TLS 1.2 or later</td><td>Security</td><td>2</td></tr><tr><td><code>AZ-SQL-004</code></td><td>Azure SQL servers require TLS 1.2 or later</td><td>Security</td><td>3</td></tr><tr><td><code>AZ-STG-002</code></td><td>Storage accounts require TLS 1.2 or later</td><td>Security</td><td>5</td></tr><tr><td><code>AZ-STG-003</code></td><td>Storage accounts accept HTTPS only</td><td>Security</td><td>5</td></tr><tr><td><code>AZ-VM-003</code></td><td>Virtual machines use managed disks</td><td>Reliability</td><td>4</td></tr><tr><td><code>AZ-WEB-001</code></td><td>App Service apps accept HTTPS only</td><td>Security</td><td>5</td></tr><tr><td><code>AZ-WEB-005</code></td><td>App Service apps have remote debugging turned off</td><td>Security</td><td>5</td></tr></tbody></table></div>
+
+<h2>Appendix B · Not scored</h2>
+<p class="muted">None.</p>
+<h2>Appendix C · Scopes scanned</h2>
+<div class="tw"><table><thead><tr><th>Kind</th><th>ID</th><th>Name</th></tr></thead><tbody>
+<tr><td>subscription</td><td><code>00000000-0000-0000-0000-00000000d001</code></td><td>sub-shop-prod</td></tr><tr><td>subscription</td><td><code>00000000-0000-0000-0000-00000000d002</code></td><td>sub-shop-nonprod</td></tr><tr><td>subscription</td><td><code>00000000-0000-0000-0000-00000000d003</code></td><td>sub-platform-shared</td></tr></tbody></table></div>
+
+<h2>Appendix D · Waived</h2>
+<p class="muted">None.</p>
+<footer>
+  <p>Scores: 100 × weight of passed checks ÷ weight of checks that passed or failed, per area; overall is the average of areas. Weights: critical 10, high 5, medium 3, low 1.</p>
+<p>Billed ₹ are what was billed for each resource from 10 Oct to 08 Nov 2026: the average billed day × 30.</p><p>1 resource(s) have no billed cost in the period yet and keep their list-price estimate, or show no figure where a check has none.</p><p>List-price estimates are per resource and will differ from billed cost.</p>  <p>findings.json SHA-256: <code>4fcef511e3de37a8a5c9a0fb5552f778e9095cf68d8e1340443ef6af9692a207</code></p>
+  <p>MCSB control IDs are from the Microsoft cloud security benchmark v2 (preview); the same IDs exist in v1, the default in Microsoft Defender for Cloud. Well-Architected IDs are Skyveda&#39;s mapping to Microsoft&#39;s published checklists. Skyveda maps to these frameworks; it does not certify compliance.</p>
+  <p><strong>Want help fixing what this report found? Skyveda offers cloud reviews, fixes and ongoing care in platform engineering, DevOps and reliability: hello@skyvedahq.com · skyvedahq.com</strong></p>
+  <p>Microsoft and Azure are trademarks of the Microsoft group of companies. Skyveda is not affiliated with or endorsed by Microsoft.</p>
+</footer>
+</div>
+</body>
+</html>
